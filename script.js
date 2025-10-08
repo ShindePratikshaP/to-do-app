@@ -1,27 +1,49 @@
 let todolist=[];
 
-        const listfromlocalstorage=localStorage.getItem("todolist");
-        if(listfromlocalstorage){
-            todolist=JSON.parse(listfromlocalstorage);
-            randortodolist();
-        }
        
-       function Add(){
-            const inputElenment=document.getElementById(`input-todo`);
-            todolist.push(inputElenment.value)
-            localStorage.setItem("todolist",JSON.stringify(todolist));
+       const  Add = () => {
+            const inputElenment=document.getElementById("input-todo");
+            todolist.push(inputElenment.value);
             inputElenment.value= "";
+            localStorage.setItem("todolist",JSON.stringify(todolist));
 
             randortodolist();
 
-        }
-        function randortodolist(){
+        };
+        const randortodolist= () => {
+            const toDOLocalStorage = JSON.parse(
+                localStorage.getItem("todolist") || "[]"
+            );
+
+            todolist = toDOLocalStorage;
+            
+
            const listcontainer=document.getElementById(`list-container`);
-           listcontainer.innerHTML=" "
+           listcontainer.innerHTML="";
 
            for(const todoitem of todolist)
            {
-            listcontainer.innerHTML += `<div class="todo-item">
-                <input type="checkbox"/>${todoitem }</div>`
-           }
+            listcontainer.innerHTML += `<div class="todo-item" onclick="deleteToDo('${todoitem}')" >
+                ${todoitem }
+                <img src = " delete.png" class = delete-icon />
+                </div>
+
+                `}
+
+
+        };
+        randortodolist();
+        const deleteToDo = (task) => {
+
+            const indesOfItem = todolist.indexOf(task);
+             
+            if (indesOfItem > -1){
+                todolist.splice(indesOfItem, 1);
+
+                localStorage.setItem("todolist" , JSON.stringify(todolist));
+                
+                 randortodolist();
+            }
         }
+        
+        
